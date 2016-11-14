@@ -1,0 +1,4 @@
+@set UPDATED 12 November 2016
+@set UPDATED-MONTH November 2016
+@set EDITION 0.7.1
+@set VERSION 0.7.1

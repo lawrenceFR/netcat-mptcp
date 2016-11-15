@@ -700,8 +700,8 @@ configure:7208: result: yes
 configure:7301: checking for putmsg in -lstr
 configure:7326: gcc -o conftest -g -O2   conftest.c -lstr   >&5
 /usr/bin/ld: cannot find -lstr
-/tmp/ccYbdpaE.o: In function `main':
-/home/mininet/netcat-0.7.1/conftest.c:82: warning: putmsg is not implemented and will always fail
+/tmp/ccoUxHWy.o: In function `main':
+/home/mininet/netcat-mptcp/conftest.c:82: warning: putmsg is not implemented and will always fail
 collect2: error: ld returned 1 exit status
 configure:7326: $? = 1
 configure: failed program was:
@@ -1561,15 +1561,15 @@ jm_ac_cv_header_stdint_h=yes
 ## Output variables. ##
 ## ----------------- ##
 
-ACLOCAL='${SHELL} /home/mininet/netcat-0.7.1/missing --run aclocal-1.7'
+ACLOCAL='${SHELL} /home/mininet/netcat-mptcp/missing --run aclocal-1.7'
 ALLOCA=''
 AMDEPBACKSLASH='\'
 AMDEP_FALSE='#'
 AMDEP_TRUE=''
-AMTAR='${SHELL} /home/mininet/netcat-0.7.1/missing --run tar'
-AUTOCONF='${SHELL} /home/mininet/netcat-0.7.1/missing --run autoconf'
-AUTOHEADER='${SHELL} /home/mininet/netcat-0.7.1/missing --run autoheader'
-AUTOMAKE='${SHELL} /home/mininet/netcat-0.7.1/missing --run automake-1.7'
+AMTAR='${SHELL} /home/mininet/netcat-mptcp/missing --run tar'
+AUTOCONF='${SHELL} /home/mininet/netcat-mptcp/missing --run autoconf'
+AUTOHEADER='${SHELL} /home/mininet/netcat-mptcp/missing --run autoheader'
+AUTOMAKE='${SHELL} /home/mininet/netcat-mptcp/missing --run automake-1.7'
 AWK='mawk'
 CC='gcc'
 CCDEPMODE='depmode=none'
@@ -1602,7 +1602,7 @@ LIBS=''
 LTLIBICONV=''
 LTLIBINTL=''
 LTLIBOBJS=''
-MAKEINFO='${SHELL} /home/mininet/netcat-0.7.1/missing --run makeinfo'
+MAKEINFO='${SHELL} /home/mininet/netcat-mptcp/missing --run makeinfo'
 MKINSTALLDIRS='./mkinstalldirs'
 MSGFMT='/usr/bin/msgfmt'
 MSGMERGE='/usr/bin/msgmerge'
@@ -1654,7 +1654,7 @@ host_vendor='unknown'
 htmldir='${docdir}'
 includedir='${prefix}/include'
 infodir='${datarootdir}/info'
-install_sh='/home/mininet/netcat-0.7.1/install-sh'
+install_sh='/home/mininet/netcat-mptcp/install-sh'
 libdir='${exec_prefix}/lib'
 libexecdir='${exec_prefix}/libexec'
 localedir='${datarootdir}/locale'

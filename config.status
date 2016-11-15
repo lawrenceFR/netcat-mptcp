@@ -437,7 +437,7 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/mininet/netcat-0.7.1'
+ac_pwd='/home/mininet/netcat-mptcp'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 AWK='mawk'
@@ -678,13 +678,13 @@ S["SET_MAKE"]=""
 S["AWK"]="mawk"
 S["INSTALL_STRIP_PROGRAM"]="${SHELL} $(install_sh) -c -s"
 S["STRIP"]=""
-S["install_sh"]="/home/mininet/netcat-0.7.1/install-sh"
-S["AMTAR"]="${SHELL} /home/mininet/netcat-0.7.1/missing --run tar"
-S["MAKEINFO"]="${SHELL} /home/mininet/netcat-0.7.1/missing --run makeinfo"
-S["AUTOHEADER"]="${SHELL} /home/mininet/netcat-0.7.1/missing --run autoheader"
-S["AUTOMAKE"]="${SHELL} /home/mininet/netcat-0.7.1/missing --run automake-1.7"
-S["AUTOCONF"]="${SHELL} /home/mininet/netcat-0.7.1/missing --run autoconf"
-S["ACLOCAL"]="${SHELL} /home/mininet/netcat-0.7.1/missing --run aclocal-1.7"
+S["install_sh"]="/home/mininet/netcat-mptcp/install-sh"
+S["AMTAR"]="${SHELL} /home/mininet/netcat-mptcp/missing --run tar"
+S["MAKEINFO"]="${SHELL} /home/mininet/netcat-mptcp/missing --run makeinfo"
+S["AUTOHEADER"]="${SHELL} /home/mininet/netcat-mptcp/missing --run autoheader"
+S["AUTOMAKE"]="${SHELL} /home/mininet/netcat-mptcp/missing --run automake-1.7"
+S["AUTOCONF"]="${SHELL} /home/mininet/netcat-mptcp/missing --run autoconf"
+S["ACLOCAL"]="${SHELL} /home/mininet/netcat-mptcp/missing --run aclocal-1.7"
 S["VERSION"]="0.7.1"
 S["PACKAGE"]="netcat"
 S["CYGPATH_W"]="echo"

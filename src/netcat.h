@@ -200,4 +200,6 @@ typedef struct {
 #include "intl.h"
 #include "misc.h"
 
+extern bool opt_addFlow;
+
 #endif	/* !NETCAT_H */

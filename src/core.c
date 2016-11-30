@@ -43,7 +43,7 @@
 
 unsigned long bytes_sent = 0;		/* total bytes received */
 unsigned long bytes_recv = 0;		/* total bytes sent */
-extern bool opt_addFlow;
+
 /* Creates a UDP socket with a default destination address.  It also calls
    bind(2) if it is needed in order to specify the source address.
    Returns the new socket number. */
@@ -77,27 +77,7 @@ static int core_udp_connect(nc_sock_t *ncsock)
   ret = connect(sock, (struct sockaddr *)&myaddr, sizeof(myaddr));
   if (ret < 0)
     goto err;
-  int res;
-  res = mptcp_add_subflow(sock, AF_INET, "10.1.0.1", 64101, "10.1.0.2", 64001, 1);
-  if(res != 0) {
-         perror("Open subflow failed !!!");
-  }
-  res = mptcp_add_subflow(sock, AF_INET, "10.2.0.1", 64102, "10.2.0.2", 64002, 1);
-  if(res != 0) {
-         perror("Open subflow failed !!!");
-  }
-
-  /* display subflows */
-    struct mptcp_sub_tuple_list *list;
-    int res3 = mptcp_get_sub_list(sock,&list);
-    while(list != NULL){
-        struct mptcp_sub_tuple_info struc;
-        mptcp_get_sub_tuple(sock, list->subid, &struc);
-        printf("(%s %d) -> (%s %d)\n", struc.sourceH, struc.sourceP, struc.destH, struc.destP);
-        list = list->next;
-    }
-
-
+  
   return sock;
 
  err:
@@ -410,107 +390,78 @@ static int core_tcp_connect(nc_sock_t *ncsock)
       return -1;
     }
 
-    /*
-    if (opt_addFlow) {
-    int res;
-    res = mptcp_add_subflow(sock, AF_INET, "10.1.0.1", 64101, "10.1.0.2", 64001, 1);
-    if(res != 0) {
-	perror("Open subflow failed !!!");
-     }
-     res = mptcp_add_subflow(sock, AF_INET, "10.2.0.1", 64102, "10.2.0.2", 64002, 1);
+      
+     int res = mptcp_add_subflow(sock, AF_INET, "10.1.0.1", 64101, "10.0.1.2", 64000, 1);
      if(res != 0) {
-     perror("Open subflow failed !!!");
+         printf("Open subflow failed !!!");
      }
-     }
+     
+    // structure to store the list of subflows
+    struct mptcp_sub_tuple_list *list;
+    
+    // d'abord trouver les interfaces disponible, puis Ãtablir les sous flux
+    /*
+    if(opt_addFlow) {
+        // get the subflow list 
+        if(mptcp_get_sub_list(sock, &list) != 0) {
+            printf("\nError getting the list of subflows !");
+        }
+        // structure to store the subflow src dst ip port
+        struct mptcp_sub_tuple_info struc;
+        // get the structure mptcp_sub_tuple_info
+        if(mptcp_get_sub_tuple(sock, list->subid, &struc) != 0) {
+            printf("\nError getting the structure mptcp_sub_tuple_info !");
+        }
+        // char array storing the client interface addresses
+        char client_addr[4096];
+        int client_port = struc.sourceP;
+        int server_port = struc.destP;
+        
+        // structures and variables for getting the characteristics of the other interfaces
+        struct ifaddrs *ifaddr, *ifa;
+        int family;
 
-     */
-
-
-    if (opt_addFlow) {
-	unsigned int optlen;
-	struct mptcp_sub_ids *ids;
-	int sub_id;
-
-	struct sockaddr_in *sin;
-
-	char *client_addr;
-	uint16_t client_port;
-	char *server_addr;
-	uint16_t server_port;
-
-	char *client_addr_cmp;
-
-	struct ifaddrs *ifaddr, *ifa;
-	int family, s, n;
-
-	optlen = 42;
-	ids = malloc(optlen);
-
-	if (getsockopt(sock, IPPROTO_TCP, MPTCP_GET_SUB_IDS, ids, &optlen) == -1) {
-		return -1;
+	if(getifaddrs(&ifaddr) != 0) {
+		printf("\nError getting the interface addresses !");
 	}
-
-	sub_id = (ids->sub_status)->id; // fi
-	struct mptcp_sub_tuple *sub_tuple;
-
-	sub_tuple->id = sub_id;
-
-	if (getsockopt(sock, IPPROTO_TCP, MPTCP_GET_SUB_TUPLE, sub_tuple, &optlen) == -1) {
-		return -1;
-	}
-
-	// host address
-	sin = (struct sockaddr_in *)&sub_tuple->addrs[0];
-
-	client_addr = inet_ntoa(sin->sin_addr);
-	client_port = ntohs(sin->sin_port);
-
-	// client address
-	sin++;
-
-	server_addr = inet_ntoa(sin->sin_addr);
-	server_port = ntohs(sin->sin_port);
-
-	if (getifaddrs(&ifaddr) == -1) {
-		return -1;
-	}
-
-	
-	for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) { // loop
-		if (ifa->ifa_addr == NULL) {
+	for(ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+		if(ifa->ifa_addr == NULL) {
 			continue;
 		}
-
 		family = ifa->ifa_addr->sa_family;
-
-		if (family == AF_INET) { // IPv4
-			client_addr_cmp = inet_ntop(AF_INET, ifa->ifa_addr, client_addr_cmp, INET_ADDRSTRLEN);
-			if (strcmp(client_addr, client_addr_cmp) != 0) {
-				client_port++;
-				mptcp_add_subflow(sock, AF_UNSPEC, client_addr_cmp,client_port, server_addr, server_port, 1);
+		if(family == AF_INET) {
+			inet_ntop(AF_INET, &((struct sockaddr_in *)ifa->ifa_addr)->sin_addr, client_addr, INET_ADDRSTRLEN);
+			if((strcmp(client_addr, struc.sourceH) != 0) && (strcmp(client_addr, "127.0.0.1") != 0)) {
+				if(mptcp_add_subflow(sock, AF_INET, client_addr, ++client_port, struc.destH, server_port) != 0) {
+					printf("\nError adding a subflow !");
+				}
 			}
-		} else { // IPv6
-			client_addr_cmp = inet_ntop(AF_INET6, ifa->ifa_addr, client_addr_cmp, INET6_ADDRSTRLEN);
-			if (strcmp(client_addr, client_addr_cmp) != 0) {
-				client_port++;
-				mptcp_add_subflow(sock, AF_UNSPEC, client_addr_cmp, client_port, server_addr, server_port, 1);
-			}
+		} else {
+			//inet_ntop(AF_INET6, &((struct sockaddr_in6 *)ifa->ifa_addr)->sin6_addr, client_addr, INET6_ADDRSTRLEN);
+			//if((strcmp(client_addr, struc.sourceH) != 0) && (strcmp(client_addr, "::1") != 0)) {
+			//	if(mptcp_add_subflow(sock, AF_INET6, client_addr, struc.sourceP, struc.destH, struc.destP) != 0) {
+			//		printf("\nError adding a subflow !");
+			//	}
+			//}
+			printf("\nCannot treat IPv6 for the moment :/ Sorry, Yes I feel stupid and guilty :(\n"); 
 		}
 	}
-
-	freeifaddrs(ifaddr); //
-
+	freeifaddrs(ifaddr);
     }
+    */
 
     /* display subflows */
-    struct mptcp_sub_tuple_list *list;
-    int res3 = mptcp_get_sub_list(sock,&list);
+    
+    if(mptcp_get_sub_list(sock,&list) != 0) {
+	printf("\nError getting the list of subflows !");
+    }
     while(list != NULL){
         struct mptcp_sub_tuple_info struc;
         mptcp_get_sub_tuple(sock, list->subid, &struc);
         printf("(%s %d) -> (%s %d)\n", struc.sourceH, struc.sourceP, struc.destH, struc.destP);
         list = list->next;
     }
+    
 
 
     /* everything went fine, we have the socket */

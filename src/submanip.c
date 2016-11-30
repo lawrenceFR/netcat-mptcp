@@ -34,13 +34,13 @@ int mptcp_add_subflow(int sockfd, int resolve_af, char *host1, int port1, char *
 
     int l1 = sizeof(*addr);
     int r1 = setipaddr_withport(resolve_af, host1, port1, addr, &l1);
-    if (r1 < 0)  return r1;
+    //if (r1 < 0)  return r1;
 
     addr++;
 
     int l2 = sizeof(*addr);
     int r2 = setipaddr_withport(resolve_af, host2, port2, addr, &l2);
-    if (r2 < 0)  return r2;
+    //if (r2 < 0)  return r2;
 
     int res = getsockopt(sockfd, IPPROTO_TCP, MPTCP_OPEN_SUB_TUPLE, sub_tuple, &optlen);
     return res;

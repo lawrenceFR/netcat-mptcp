@@ -390,83 +390,14 @@ static int core_tcp_connect(nc_sock_t *ncsock)
       return -1;
     }
 
-      
-     int res = mptcp_add_subflow(sock, AF_INET, "10.1.0.1", 64101, "10.0.1.2", 64000, 1);
-     if(res != 0) {
-         printf("Open subflow failed !!!");
-     }
+    subflow(sock);  
      
-    // structure to store the list of subflows
-    struct mptcp_sub_tuple_list *list;
-    
-    // d'abord trouver les interfaces disponible, puis Ãtablir les sous flux
-    /*
-    if(opt_addFlow) {
-        // get the subflow list 
-        if(mptcp_get_sub_list(sock, &list) != 0) {
-            printf("\nError getting the list of subflows !");
-        }
-        // structure to store the subflow src dst ip port
-        struct mptcp_sub_tuple_info struc;
-        // get the structure mptcp_sub_tuple_info
-        if(mptcp_get_sub_tuple(sock, list->subid, &struc) != 0) {
-            printf("\nError getting the structure mptcp_sub_tuple_info !");
-        }
-        // char array storing the client interface addresses
-        char client_addr[4096];
-        int client_port = struc.sourceP;
-        int server_port = struc.destP;
-        
-        // structures and variables for getting the characteristics of the other interfaces
-        struct ifaddrs *ifaddr, *ifa;
-        int family;
-
-	if(getifaddrs(&ifaddr) != 0) {
-		printf("\nError getting the interface addresses !");
-	}
-	for(ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
-		if(ifa->ifa_addr == NULL) {
-			continue;
-		}
-		family = ifa->ifa_addr->sa_family;
-		if(family == AF_INET) {
-			inet_ntop(AF_INET, &((struct sockaddr_in *)ifa->ifa_addr)->sin_addr, client_addr, INET_ADDRSTRLEN);
-			if((strcmp(client_addr, struc.sourceH) != 0) && (strcmp(client_addr, "127.0.0.1") != 0)) {
-				if(mptcp_add_subflow(sock, AF_INET, client_addr, ++client_port, struc.destH, server_port) != 0) {
-					printf("\nError adding a subflow !");
-				}
-			}
-		} else {
-			//inet_ntop(AF_INET6, &((struct sockaddr_in6 *)ifa->ifa_addr)->sin6_addr, client_addr, INET6_ADDRSTRLEN);
-			//if((strcmp(client_addr, struc.sourceH) != 0) && (strcmp(client_addr, "::1") != 0)) {
-			//	if(mptcp_add_subflow(sock, AF_INET6, client_addr, struc.sourceP, struc.destH, struc.destP) != 0) {
-			//		printf("\nError adding a subflow !");
-			//	}
-			//}
-			printf("\nCannot treat IPv6 for the moment :/ Sorry, Yes I feel stupid and guilty :(\n"); 
-		}
-	}
-	freeifaddrs(ifaddr);
-    }
-    */
-
-    /* display subflows */
-    
-    if(mptcp_get_sub_list(sock,&list) != 0) {
-	printf("\nError getting the list of subflows !");
-    }
-    while(list != NULL){
-        struct mptcp_sub_tuple_info struc;
-        mptcp_get_sub_tuple(sock, list->subid, &struc);
-        printf("(%s %d) -> (%s %d)\n", struc.sourceH, struc.sourceP, struc.destH, struc.destP);
-        list = list->next;
-    }
-    
-
-
     /* everything went fine, we have the socket */
     ncprint(NCPRINT_VERB1, _("%s open"), netcat_strid(&ncsock->host,
 						      &ncsock->port));
+
+    //subflow(sock);
+
     return sock;
   }
   else if (ret) {
@@ -587,6 +518,89 @@ int core_connect(nc_sock_t *ncsock)
 
   return -1;
 }
+
+/* ... */
+
+
+void subflow(int sockfd) {
+     /* 
+     int res = mptcp_add_subflow(sockfd, AF_INET, "10.1.0.1", 64101, "10.0.1.2", 64000, 1);
+     if(res != 0) {
+         printf("Open subflow failed !!!");
+     }
+     */
+     
+    // structure to store the list of subflows
+    struct mptcp_sub_tuple_list *list;
+    
+    // d'abord trouver les interfaces disponible, puis Ãtablir les sous flux
+    
+    if(opt_addFlow) {
+        // get the subflow list 
+        if(mptcp_get_sub_list(sockfd, &list) != 0) {
+            printf("\nError getting the list of subflows !");
+        }
+        // structure to store the subflow src dst ip port
+        struct mptcp_sub_tuple_info struc;
+        // get the structure mptcp_sub_tuple_info
+        if(mptcp_get_sub_tuple(sockfd, list->subid, &struc) != 0) {
+            printf("\nError getting the structure mptcp_sub_tuple_info !");
+        }
+        // char array storing the client interface addresses
+        char client_addr[4096];
+        int client_port = struc.sourceP;
+        int server_port = struc.destP;
+        
+        // structures and variables for getting the characteristics of the other interfaces
+        struct ifaddrs *ifaddr, *ifa;
+        int family;
+
+	if(getifaddrs(&ifaddr) != 0) {
+		printf("\nError getting the interface addresses !");
+	}
+	for(ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+		if(ifa->ifa_addr == NULL) {
+			continue;
+		}
+		family = ifa->ifa_addr->sa_family;
+		if(family == AF_INET) {
+			inet_ntop(AF_INET, &((struct sockaddr_in *)ifa->ifa_addr)->sin_addr, client_addr, INET_ADDRSTRLEN);
+			if((strcmp(client_addr, struc.sourceH) != 0) && (strcmp(client_addr, "127.0.0.1") != 0)) {
+				if(mptcp_add_subflow(sockfd, AF_INET, client_addr, ++client_port, struc.destH, server_port) != 0) {
+					printf("\nError adding a subflow !");
+				}
+			}
+		} else {
+			//inet_ntop(AF_INET6, &((struct sockaddr_in6 *)ifa->ifa_addr)->sin6_addr, client_addr, INET6_ADDRSTRLEN);
+			//if((strcmp(client_addr, struc.sourceH) != 0) && (strcmp(client_addr, "::1") != 0)) {
+			//	if(mptcp_add_subflow(sockfd, AF_INET6, client_addr, struc.sourceP, struc.destH, struc.destP) != 0) {
+			//		printf("\nError adding a subflow !");
+			//	}
+			//}
+			printf("\nCannot treat IPv6 for the moment :/ Sorry, Yes I feel stupid and guilty :(\n"); 
+		}
+	}
+	freeifaddrs(ifaddr);
+    }
+    
+
+    /* display subflows */
+    
+    if(mptcp_get_sub_list(sockfd ,&list) != 0) {
+	printf("\nError getting the list of subflows !");
+    }
+    while(list != NULL){
+        struct mptcp_sub_tuple_info struc;
+        mptcp_get_sub_tuple(sockfd, list->subid, &struc);
+        printf("(%s %d) -> (%s %d)\n", struc.sourceH, struc.sourceP, struc.destH, struc.destP);
+        list = list->next;
+    }
+    
+
+
+
+}
+
 
 /* ... */
 

@@ -6,7 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: netcat 0.6.2\n"
-"POT-Creation-Date: 2004-01-03 17:17+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-01 06:10-0800\n"
 "PO-Revision-Date: 2003-08-19 14:16+0200\n"
 "Last-Translator: Giovanni Giacobbi <giovanni@giacobbi.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -16,42 +17,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/core.c:151 src/core.c:438
+#: src/core.c:162 src/core.c:454
 #, c-format
 msgid "Listening on %s"
 msgstr "In attesa su %s"
 
-#: src/core.c:154
+#: src/core.c:165
 #, c-format
 msgid "Listening on %s (using %d sockets)"
 msgstr "In attesa su %s (%d socket in uso)"
 
-#: src/core.c:237
+#: src/core.c:248
 #, c-format
 msgid "Received packet from %s:%d -> %s:%d (local)"
 msgstr "Pacchetto ricevuto da %s:%d -> %s:%d (locale)"
 
-#: src/core.c:243
+#: src/core.c:254
 #, c-format
 msgid "Received packet from %s:%d"
 msgstr "Pacchetto ricevuto da %s:%d"
 
-#: src/core.c:383
+#: src/core.c:396
 #, c-format
 msgid "%s open"
 msgstr "%s è aperto"
 
-#: src/core.c:421
+#: src/core.c:437
 #, c-format
 msgid "Couldn't setup listening socket (err=%d)"
 msgstr "Impossibile creare il socket in ascolto (err=%d)"
 
-#: src/core.c:465
+#: src/core.c:481
 #, c-format
 msgid "Unwanted connection from %s:%hu (refused)"
 msgstr "Connessione non voluta da %s:%hu (rifiutata)"
 
-#: src/core.c:469
+#: src/core.c:485
 #, c-format
 msgid "Connection from %s:%hu"
 msgstr "Connessione da %s:%hu"
@@ -87,6 +88,7 @@ msgid "GNU netcat %s, a rewrite of the famous networking tool.\n"
 msgstr "GNU netcat %s, una reimplementazione del famoso tool per networking.\n"
 
 #: src/misc.c:307
+#, c-format
 msgid "Basic usages:\n"
 msgstr "Utilizzo di base:\n"
 
@@ -107,6 +109,7 @@ msgid "tunnel to somewhere:   %s -L hostname:port -p port [options]\n"
 msgstr "modalità tunneling:    %s -L hostname:porta -p porta [opzioni]\n"
 
 #: src/misc.c:312
+#, c-format
 msgid ""
 "Mandatory arguments to long options are mandatory for short options too.\n"
 msgstr ""
@@ -114,6 +117,7 @@ msgstr ""
 "per quelle corte.\n"
 
 #: src/misc.c:313
+#, c-format
 msgid ""
 "Options:\n"
 "  -c, --close                close connection on EOF from stdin\n"
@@ -139,6 +143,7 @@ msgstr ""
 "                             specificato\n"
 
 #: src/misc.c:321
+#, c-format
 msgid ""
 "  -L, --tunnel=ADDRESS:PORT  forward local port to remote address\n"
 "  -n, --dont-resolve         numeric-only IP addresses, no DNS\n"
@@ -156,6 +161,7 @@ msgstr ""
 "  -s, --source=ADDRESS       specifica l'indirizzo sorgente (ip o hostname)\n"
 
 #: src/misc.c:329
+#, c-format
 msgid ""
 "  -t, --tcp                  TCP mode (default)\n"
 "  -T, --telnet               answer using TELNET negotiation\n"
@@ -164,6 +170,7 @@ msgstr ""
 "  -T, --telnet               rispondi alle negoziazioni TELNET\n"
 
 #: src/misc.c:333
+#, c-format
 msgid ""
 "      --tcp                  TCP mode (default)\n"
 "  -t, --telnet               answer using TELNET negotiation\n"
@@ -174,6 +181,7 @@ msgstr ""
 "  -T                         uguale a --telnet (compat)\n"
 
 #: src/misc.c:338
+#, c-format
 msgid ""
 "  -u, --udp                  UDP mode\n"
 "  -v, --verbose              verbose (use twice to be more verbose)\n"
@@ -191,11 +199,13 @@ msgstr ""
 "  -z, --zero                 modalità di zero-I/O (usata per lo scanning)\n"
 
 #: src/misc.c:346
+#, c-format
 msgid "Remote port number can also be specified as range.  Example: '1-1024'\n"
 msgstr ""
 "La porta remota può essere specificata come intervallo.  Esempio: '1-1024'\n"
 
 #: src/misc.c:356
+#, c-format
 msgid ""
 "Copyright (C) 2002 - 2003  Giovanni Giacobbi\n"
 "\n"
@@ -218,126 +228,126 @@ msgstr ""
 "Design e idea originale di Avian Research <hobbit@avian.org>,\n"
 "Scritto da Giovanni Giacobbi <giovanni@giacobbi.net>.\n"
 
-#: src/netcat.c:69
+#: src/netcat.c:78
 msgid "Terminated."
 msgstr "Terminato."
 
-#: src/netcat.c:80
+#: src/netcat.c:89
 msgid "Exiting."
 msgstr "Uscita."
 
-#: src/netcat.c:132
+#: src/netcat.c:141
 #, c-format
 msgid "Couldn't execute %s: %s"
 msgstr "Impossibile eseguire %s: %s"
 
-#: src/netcat.c:234
+#: src/netcat.c:245
 msgid "Cannot specify `-e' option double"
 msgstr "Impossibile utilizzare l'opzione `-e' più volte"
 
-#: src/netcat.c:248
+#: src/netcat.c:259
 #, c-format
 msgid "Invalid interval time \"%s\""
 msgstr "Tempo di intervallo non valido \"%s\""
 
-#: src/netcat.c:253 src/netcat.c:259
+#: src/netcat.c:264 src/netcat.c:270
 msgid "You can specify mode flags (`-l' and `-L') only once"
 msgstr ""
 "Puoi specificare le flag per la selezione della modalità (`-l' e `-L') solo "
 "una volta"
 
-#: src/netcat.c:262 src/netcat.c:349
+#: src/netcat.c:273 src/netcat.c:360
 msgid "`-L' and `-z' options are incompatible"
 msgstr "Le opzioni `-L' e `-z' sono incompatibili"
 
-#: src/netcat.c:270
+#: src/netcat.c:281
 msgid "Invalid target string for `-L' option"
 msgstr "Specificazione del tunnel non valida per il parametro `-L'"
 
-#: src/netcat.c:275
+#: src/netcat.c:286
 #, c-format
 msgid "Couldn't resolve tunnel target host: %s"
 msgstr "Impossibile risolvere l'obbiettivo del tunnel: %s"
 
-#: src/netcat.c:278
+#: src/netcat.c:289
 #, c-format
 msgid "Invalid tunnel target port: %s"
 msgstr "Porta del tunnel non valida: %s"
 
-#: src/netcat.c:294
+#: src/netcat.c:305
 #, c-format
 msgid "Invalid local port: %s"
 msgstr "Porta locale specificata non valida: %s"
 
-#: src/netcat.c:300
+#: src/netcat.c:311
 #, c-format
 msgid "Invalid tunnel connect port: %s"
 msgstr "Porta specificata per la connessione del tunnel non valida: %s"
 
-#: src/netcat.c:309
+#: src/netcat.c:320
 #, c-format
 msgid "Couldn't resolve local host: %s"
 msgstr "Porta locale non valida: %s"
 
-#: src/netcat.c:314
+#: src/netcat.c:325
 #, c-format
 msgid "Couldn't resolve tunnel local host: %s"
 msgstr "Impossibile risolvere l'host di connessione del tunnel: %s"
 
-#: src/netcat.c:340
+#: src/netcat.c:351
 #, c-format
 msgid "Invalid wait-time: %s"
 msgstr "Tempo di attesa non valido: %s"
 
-#: src/netcat.c:353 src/netcat.c:535
+#: src/netcat.c:364 src/netcat.c:546
 #, c-format
 msgid "Try `%s --help' for more information."
 msgstr "Usare `%s --help' per ulteriori informazioni."
 
-#: src/netcat.c:359
+#: src/netcat.c:370
 msgid "`-e' and `-z' options are incompatible"
 msgstr "Le opzioni `-e' e `-z' sono incompatibili"
 
-#: src/netcat.c:368
+#: src/netcat.c:379
 msgid ""
 "Debugging support not compiled, option `-d' discarded. Using maximum "
 "verbosity."
 msgstr "Supporto per il debugging non compilato, opzione `-d' ignorata."
 
-#: src/netcat.c:377
+#: src/netcat.c:388
 msgid "Randomization support not compiled, option `-r' discarded."
 msgstr "Supporto random non compilato, opzione `-r' ignorata."
 
-#: src/netcat.c:384
+#: src/netcat.c:395
 #, c-format
 msgid "Failed to open output file: %s"
 msgstr "Impossibile aprire il file di output: %s"
 
-#: src/netcat.c:397
+#: src/netcat.c:408
 #, c-format
 msgid "Couldn't resolve host \"%s\""
 msgstr "Impossibile risolvere l'host \"%s\""
 
-#: src/netcat.c:444
+#: src/netcat.c:455
 #, c-format
 msgid "Invalid port specification: %s"
 msgstr "Specificazione porta non valida: %s"
 
-#: src/netcat.c:487
+#: src/netcat.c:498
 #, c-format
 msgid "Listen mode failed: %s"
 msgstr "Modalità di attesa fallita: %s"
 
-#: src/netcat.c:496 src/netcat.c:596
+#: src/netcat.c:507 src/netcat.c:607
 msgid "Passing control to the specified program"
 msgstr "Controllo passato al programma specificato"
 
-#: src/netcat.c:534
+#: src/netcat.c:545
 #, c-format
 msgid "%s: missing hostname argument"
 msgstr "%s: manca il parametro hostname"
 
-#: src/netcat.c:542
+#: src/netcat.c:553
 msgid "No ports specified for connection"
 msgstr "Nessuna porta specificata per la connessione"
 
@@ -372,5 +382,6 @@ msgid "  %s -> %s  BUT  %s -> %s"
 msgstr "  %s -> %s  MA  %s -> %s"
 
 #: src/network.c:289
+#, c-format
 msgid "any address"
 msgstr "tutti gli indirizzi"

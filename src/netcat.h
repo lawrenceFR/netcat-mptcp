@@ -201,5 +201,8 @@ typedef struct {
 #include "misc.h"
 
 extern bool opt_addFlow;
+extern bool opt_addWifi;
+extern bool opt_addCellular;
+
 
 #endif	/* !NETCAT_H */

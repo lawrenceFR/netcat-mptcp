@@ -38,6 +38,7 @@
 #include "subinfo.h"
 #include "submanip.h"
 #include "suboption.h"
+#include "core.h"
 
 /* Global variables */
 
@@ -390,7 +391,20 @@ static int core_tcp_connect(nc_sock_t *ncsock)
       return -1;
     }
 
-    subflow(sock);  
+    if(opt_addWifi) {
+	printf("\nEntering Wifi\n");
+	struct config configstruct = readConfig();
+	subFlowAdd(sock, configstruct.wifi);
+    } else if(opt_addCellular) {
+	//struct config configstruct = readConfig();
+	//subFlowAdd(sock, configstruct.cellular);
+	printf("\nThird interface not added yet...Sorry :(\n");
+    } else if(opt_addFlow) {
+	subFlow(sock);
+    }else {
+	printf("\nNo supplementary flow initiation asked\n");
+    }
+     
      
     /* everything went fine, we have the socket */
     ncprint(NCPRINT_VERB1, _("%s open"), netcat_strid(&ncsock->host,
@@ -522,20 +536,19 @@ int core_connect(nc_sock_t *ncsock)
 /* ... */
 
 
-void subflow(int sockfd) {
-     /* 
-     int res = mptcp_add_subflow(sockfd, AF_INET, "10.1.0.1", 64101, "10.0.1.2", 64000, 1);
-     if(res != 0) {
-         printf("Open subflow failed !!!");
-     }
-     */
+void subFlow(int sockfd) {
+         /* 
+         int res = mptcp_add_subflow(sockfd, AF_INET, "10.1.0.1", 64101, "10.0.1.2", 64000, 1);
+         if(res != 0) {
+             printf("Open subflow failed !!!");
+         }
+         */
      
-    // structure to store the list of subflows
-    struct mptcp_sub_tuple_list *list;
+        // structure to store the list of subflows
+        struct mptcp_sub_tuple_list *list;
     
-    // d'abord trouver les interfaces disponible, puis Ãtablir les sous flux
+        // d'abord trouver les interfaces disponible, puis Ãtablir les sous flux
     
-    if(opt_addFlow) {
         // get the subflow list 
         if(mptcp_get_sub_list(sockfd, &list) != 0) {
             printf("\nError getting the list of subflows !");
@@ -581,24 +594,98 @@ void subflow(int sockfd) {
 		}
 	}
 	freeifaddrs(ifaddr);
-    }
+   
     
 
-    /* display subflows */
+        /* display subflows */
     
-    if(mptcp_get_sub_list(sockfd ,&list) != 0) {
-	printf("\nError getting the list of subflows !");
-    }
-    while(list != NULL){
+        if(mptcp_get_sub_list(sockfd ,&list) != 0) {
+	    printf("\nError getting the list of subflows !");
+        }
+        while(list != NULL){
+            struct mptcp_sub_tuple_info struc;
+            mptcp_get_sub_tuple(sockfd, list->subid, &struc);
+            printf("(%s %d) -> (%s %d)\n", struc.sourceH, struc.sourceP, struc.destH, struc.destP);
+            list = list->next;
+        }
+    
+
+
+
+}
+/* ... */
+
+void subFlowAdd(int sockfd, char ip[]) {
+	printf("\nIP address read is %s\n", ip);
+	// structure to store the list of subflows
+        struct mptcp_sub_tuple_list *list;
+ 
+        // get the subflow list 
+        if(mptcp_get_sub_list(sockfd, &list) != 0) {
+            printf("\nError getting the list of subflows !");
+        }
+        // structure to store the subflow src dst ip port
         struct mptcp_sub_tuple_info struc;
-        mptcp_get_sub_tuple(sockfd, list->subid, &struc);
-        printf("(%s %d) -> (%s %d)\n", struc.sourceH, struc.sourceP, struc.destH, struc.destP);
-        list = list->next;
-    }
+        // get the structure mptcp_sub_tuple_info
+        if(mptcp_get_sub_tuple(sockfd, list->subid, &struc) != 0) {
+            printf("\nError getting the structure mptcp_sub_tuple_info !");
+        }
+        // char array storing the client interface addresses
+        char client_addr[4096];
+        int client_port = struc.sourceP;
+        int server_port = struc.destP;
+        
+	if(mptcp_add_subflow(sockfd, AF_INET, ip, ++client_port, struc.destH, server_port) != 0) {
+					printf("\nError adding a subflow !");
+	}
+
+	/* display subflows */
     
+        if(mptcp_get_sub_list(sockfd ,&list) != 0) {
+	    printf("\nError getting the list of subflows !");
+        }
+        while(list != NULL){
+            struct mptcp_sub_tuple_info struc;
+            mptcp_get_sub_tuple(sockfd, list->subid, &struc);
+            printf("(%s %d) -> (%s %d)\n", struc.sourceH, struc.sourceP, struc.destH, struc.destP);
+            list = list->next;
+        }
 
 
+}
 
+
+/* ... */
+
+struct config readConfig() {
+	struct config configstruct;
+	printf("\nReading config file\n");
+	FILE *file = fopen("/home/mininet/netcat-mptcp/src/config.conf", "r");
+
+	if(file != NULL) {
+		char line[MAXBUF];
+		int i = 0;
+
+		while(fgets(line, sizeof(line), file) != NULL) {
+			char *cfline;
+			cfline = strstr((char *)line, DELIM);
+			cfline = cfline + strlen(DELIM);
+
+			if(i == 0) {
+				memcpy(configstruct.wifi, cfline, strlen(cfline));
+				printf("\nWifi ip address is %s\n", configstruct.wifi);
+			} else if(i == 1) {
+				memcpy(configstruct.cellular, cfline, strlen(cfline));
+				printf("\nCellular ip address is %s\n", configstruct.cellular);
+			} else {
+				printf("\nNo more lines\n");
+			}
+
+			i++;
+		}
+		fclose(file);
+	}
+	return configstruct;
 }
 
 

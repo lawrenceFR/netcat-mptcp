@@ -62,6 +62,8 @@ bool opt_telnet = FALSE;	/* answer in telnet mode */
 bool opt_hexdump = FALSE;	/* hexdump traffic */
 bool opt_zero = FALSE;		/* zero I/O mode (don't expect anything) */
 bool opt_addFlow = FALSE;       /* option to add supplementary subflows*/
+bool opt_addWifi = FALSE;	/* option to add the Wifi subflow */
+bool opt_addCellular = FALSE;		/* option to add the 3G subflow */
 int opt_interval = 0;		/* delay (in seconds) between lines/ports */
 int opt_verbose = 0;		/* be verbose (> 1 to be MORE verbose) */
 int opt_wait = 0;		/* wait time */
@@ -225,12 +227,16 @@ int main(int argc, char *argv[])
 	{ 0, 0, 0, 0 }
     };
 
-    c = getopt_long(argc, argv, "acde:g:G:hi:lL:no:p:P:rs:S:tTuvVxw:z",
+    c = getopt_long(argc, argv, "1:2:acde:g:G:hi:lL:no:p:P:rs:S:tTuvVxw:z",
 		    long_options, &option_index);
     if (c == -1)
       break;
 
     switch (c) {
+    case '1':
+      opt_addWifi = TRUE;	/* enable opt_addWifi */
+    case '2':
+      opt_addCellular = TRUE;		/* enable opt_addCellular */
     case 'a':
       opt_addFlow = TRUE; 	/* enable MPTCP addFlow */
     case 'c':			/* close connection on EOF from stdin */

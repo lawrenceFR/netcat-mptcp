@@ -33,5 +33,5 @@ struct config {
 
 struct config readConfig();
 
-void subFlow(int);
-void subFlowAdd(int, char[]);
+void addAllSubflows(int);
+void addSubflow(int, char[]);

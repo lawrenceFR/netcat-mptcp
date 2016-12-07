@@ -200,7 +200,7 @@ typedef struct {
 #include "intl.h"
 #include "misc.h"
 
-extern bool opt_addFlow;
+extern bool opt_addAllSubflows;
 extern bool opt_addWifi;
 extern bool opt_addCellular;
 

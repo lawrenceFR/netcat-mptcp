@@ -178,13 +178,13 @@ configure:4076: checking for pod2man
 configure:4094: found /usr/bin/pod2man
 configure:4107: result: /usr/bin/pod2man
 configure:4137: checking for msgfmt
-configure:4165: result: /usr/bin/msgfmt
+configure:4168: result: no
 configure:4174: checking for gmsgfmt
-configure:4205: result: /usr/bin/msgfmt
+configure:4205: result: :
 configure:4216: checking for xgettext
-configure:4244: result: /usr/bin/xgettext
+configure:4247: result: no
 configure:4255: checking for msgmerge
-configure:4282: result: /usr/bin/msgmerge
+configure:4285: result: no
 configure:4344: checking for ld used by GCC
 configure:4407: result: /usr/bin/ld
 configure:4414: checking if the linker (/usr/bin/ld) is GNU ld
@@ -700,7 +700,7 @@ configure:7208: result: yes
 configure:7301: checking for putmsg in -lstr
 configure:7326: gcc -o conftest -g -O2   conftest.c -lstr   >&5
 /usr/bin/ld: cannot find -lstr
-/tmp/cchmnL0a.o: In function `main':
+/tmp/ccZTtRU6.o: In function `main':
 /home/mininet/netcat-mptcp/conftest.c:82: warning: putmsg is not implemented and will always fail
 collect2: error: ld returned 1 exit status
 configure:7326: $? = 1
@@ -1508,13 +1508,13 @@ ac_cv_lib_str_putmsg=no
 ac_cv_member_struct_sockaddr_sa_len=no
 ac_cv_objext=o
 ac_cv_path_EGREP='/bin/grep -E'
-ac_cv_path_GMSGFMT=/usr/bin/msgfmt
+ac_cv_path_GMSGFMT=:
 ac_cv_path_GREP=/bin/grep
-ac_cv_path_MSGFMT=/usr/bin/msgfmt
-ac_cv_path_MSGMERGE=/usr/bin/msgmerge
+ac_cv_path_MSGFMT=:
+ac_cv_path_MSGMERGE=:
 ac_cv_path_PERL=/usr/bin/perl
 ac_cv_path_POD2MAN=/usr/bin/pod2man
-ac_cv_path_XGETTEXT=/usr/bin/xgettext
+ac_cv_path_XGETTEXT=:
 ac_cv_path_install='/usr/bin/install -c'
 ac_cv_prog_AWK=mawk
 ac_cv_prog_CPP='gcc -E'
@@ -1586,7 +1586,7 @@ ECHO_T=''
 EGREP='/bin/grep -E'
 EXEEXT=''
 GLIBC21='yes'
-GMSGFMT='/usr/bin/msgfmt'
+GMSGFMT=':'
 GREP='/bin/grep'
 INSTALL_DATA='${INSTALL} -m 644'
 INSTALL_PROGRAM='${INSTALL}'
@@ -1604,8 +1604,8 @@ LTLIBINTL=''
 LTLIBOBJS=''
 MAKEINFO='${SHELL} /home/mininet/netcat-mptcp/missing --run makeinfo'
 MKINSTALLDIRS='./mkinstalldirs'
-MSGFMT='/usr/bin/msgfmt'
-MSGMERGE='/usr/bin/msgmerge'
+MSGFMT=':'
+MSGMERGE=':'
 NEED_GETOPT_FALSE=''
 NEED_GETOPT_TRUE='#'
 OBJEXT='o'
@@ -1626,7 +1626,7 @@ SHELL='/bin/bash'
 STRIP=''
 USE_NLS='yes'
 VERSION='0.7.1'
-XGETTEXT='/usr/bin/xgettext'
+XGETTEXT=':'
 ac_ct_CC='gcc'
 all_includes=' '
 all_libraries=' '

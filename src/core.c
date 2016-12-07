@@ -394,13 +394,12 @@ static int core_tcp_connect(nc_sock_t *ncsock)
     if(opt_addWifi) {
 	printf("\nEntering Wifi\n");
 	struct config configstruct = readConfig();
-	subFlowAdd(sock, configstruct.wifi);
+	addSubflow(sock, configstruct.wifi);
     } else if(opt_addCellular) {
-	//struct config configstruct = readConfig();
-	//subFlowAdd(sock, configstruct.cellular);
-	printf("\nThird interface not added yet...Sorry :(\n");
-    } else if(opt_addFlow) {
-	subFlow(sock);
+	struct config configstruct = readConfig();
+	addSubflow(sock, configstruct.cellular);
+    } else if(opt_addAllSubflows) {
+	addAllSubflows(sock);
     }else {
 	printf("\nNo supplementary flow initiation asked\n");
     }
@@ -536,13 +535,7 @@ int core_connect(nc_sock_t *ncsock)
 /* ... */
 
 
-void subFlow(int sockfd) {
-         /* 
-         int res = mptcp_add_subflow(sockfd, AF_INET, "10.1.0.1", 64101, "10.0.1.2", 64000, 1);
-         if(res != 0) {
-             printf("Open subflow failed !!!");
-         }
-         */
+void addAllSubflows(int sock) { 
      
         // structure to store the list of subflows
         struct mptcp_sub_tuple_list *list;
@@ -550,13 +543,13 @@ void subFlow(int sockfd) {
         // d'abord trouver les interfaces disponible, puis Ãtablir les sous flux
     
         // get the subflow list 
-        if(mptcp_get_sub_list(sockfd, &list) != 0) {
+        if(mptcp_get_sub_list(sock, &list) != 0) {
             printf("\nError getting the list of subflows !");
         }
         // structure to store the subflow src dst ip port
         struct mptcp_sub_tuple_info struc;
         // get the structure mptcp_sub_tuple_info
-        if(mptcp_get_sub_tuple(sockfd, list->subid, &struc) != 0) {
+        if(mptcp_get_sub_tuple(sock, list->subid, &struc) != 0) {
             printf("\nError getting the structure mptcp_sub_tuple_info !");
         }
         // char array storing the client interface addresses
@@ -579,7 +572,7 @@ void subFlow(int sockfd) {
 		if(family == AF_INET) {
 			inet_ntop(AF_INET, &((struct sockaddr_in *)ifa->ifa_addr)->sin_addr, client_addr, INET_ADDRSTRLEN);
 			if((strcmp(client_addr, struc.sourceH) != 0) && (strcmp(client_addr, "127.0.0.1") != 0)) {
-				if(mptcp_add_subflow(sockfd, AF_INET, client_addr, ++client_port, struc.destH, server_port) != 0) {
+				if(mptcp_add_subflow(sock, AF_INET, client_addr, ++client_port, struc.destH, server_port) != 0) {
 					printf("\nError adding a subflow !");
 				}
 			}
@@ -590,7 +583,7 @@ void subFlow(int sockfd) {
 			//		printf("\nError adding a subflow !");
 			//	}
 			//}
-			printf("\nCannot treat IPv6 for the moment :/ Sorry, Yes I feel stupid and guilty :(\n"); 
+			printf("\nCannot treat IPv6 for the moment :/ Sorry, Yes it's kinda lame :(\n"); 
 		}
 	}
 	freeifaddrs(ifaddr);
@@ -599,12 +592,11 @@ void subFlow(int sockfd) {
 
         /* display subflows */
     
-        if(mptcp_get_sub_list(sockfd ,&list) != 0) {
+        if(mptcp_get_sub_list(sock, &list) != 0) {
 	    printf("\nError getting the list of subflows !");
         }
         while(list != NULL){
-            struct mptcp_sub_tuple_info struc;
-            mptcp_get_sub_tuple(sockfd, list->subid, &struc);
+            mptcp_get_sub_tuple(sock, list->subid, &struc);
             printf("(%s %d) -> (%s %d)\n", struc.sourceH, struc.sourceP, struc.destH, struc.destP);
             list = list->next;
         }
@@ -615,42 +607,46 @@ void subFlow(int sockfd) {
 }
 /* ... */
 
-void subFlowAdd(int sockfd, char ip[]) {
+void addSubflow(int sock, char ip[]) {
+	/*
+	printf("\nRes = %d\n", mptcp_add_subflow(sock, AF_INET, "10.0.5.7", 64101, 10.0.4.7, 64000, 1));
+	*/
+	
 	printf("\nIP address read is %s\n", ip);
 	// structure to store the list of subflows
         struct mptcp_sub_tuple_list *list;
  
         // get the subflow list 
-        if(mptcp_get_sub_list(sockfd, &list) != 0) {
+        if(mptcp_get_sub_list(sock, &list) != 0) {
             printf("\nError getting the list of subflows !");
         }
         // structure to store the subflow src dst ip port
         struct mptcp_sub_tuple_info struc;
         // get the structure mptcp_sub_tuple_info
-        if(mptcp_get_sub_tuple(sockfd, list->subid, &struc) != 0) {
+        if(mptcp_get_sub_tuple(sock, list->subid, &struc) != 0) {
             printf("\nError getting the structure mptcp_sub_tuple_info !");
         }
         // char array storing the client interface addresses
         char client_addr[4096];
         int client_port = struc.sourceP;
         int server_port = struc.destP;
-        
-	if(mptcp_add_subflow(sockfd, AF_INET, ip, ++client_port, struc.destH, server_port) != 0) {
-					printf("\nError adding a subflow !");
+        int resultat; 
+	if((resultat = mptcp_add_subflow(sock, AF_INET, ip, ++client_port, struc.destH, server_port)) != 0) {
+					printf("\nError adding a subflow ! Result = %d\n", resultat);
 	}
+	
 
 	/* display subflows */
-    
-        if(mptcp_get_sub_list(sockfd ,&list) != 0) {
+         
+        if(mptcp_get_sub_list(sock, &list) != 0) {
 	    printf("\nError getting the list of subflows !");
         }
         while(list != NULL){
-            struct mptcp_sub_tuple_info struc;
-            mptcp_get_sub_tuple(sockfd, list->subid, &struc);
+            mptcp_get_sub_tuple(sock, list->subid, &struc);
             printf("(%s %d) -> (%s %d)\n", struc.sourceH, struc.sourceP, struc.destH, struc.destP);
             list = list->next;
         }
-
+	
 
 }
 

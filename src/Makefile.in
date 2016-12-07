@@ -157,7 +157,11 @@ netcat_SOURCES = \
 	netcat.c \
 	network.c \
 	telnet.c \
-	udphelper.c
+	udphelper.c \
+	makeaddr.c \
+	subinfo.c \
+	submanip.c \
+	suboption.c
 
 
 netcat_LDADD = @CONTRIBLIBS@ @INTLLIBS@
@@ -178,7 +182,9 @@ PROGRAMS = $(bin_PROGRAMS)
 
 am_netcat_OBJECTS = core.$(OBJEXT) flagset.$(OBJEXT) misc.$(OBJEXT) \
 	netcat.$(OBJEXT) network.$(OBJEXT) telnet.$(OBJEXT) \
-	udphelper.$(OBJEXT)
+	udphelper.$(OBJEXT) \
+	makeaddr.$(OBJEXT) subinfo.$(OBJEXT) submanip.$(OBJEXT) \
+	suboption.$(OBJEXT)
 netcat_OBJECTS = $(am_netcat_OBJECTS)
 netcat_DEPENDENCIES =
 netcat_LDFLAGS =

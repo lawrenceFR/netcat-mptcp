@@ -31,12 +31,6 @@
 #include <getopt.h>
 #include <time.h>
 
-/* include simpler_c*/
-#include "makeaddr.h"
-#include "subinfo.h"
-#include "submanip.h"
-#include "suboption.h"
-
 		/* time(2) used as random seed */
 
 /* int gatesidx = 0; */		/* LSRR hop count */
@@ -61,9 +55,9 @@ bool opt_udpmode = FALSE;	/* use udp protocol instead of tcp */
 bool opt_telnet = FALSE;	/* answer in telnet mode */
 bool opt_hexdump = FALSE;	/* hexdump traffic */
 bool opt_zero = FALSE;		/* zero I/O mode (don't expect anything) */
-bool opt_addFlow = FALSE;       /* option to add supplementary subflows*/
+bool opt_addAllSubflows = FALSE;       /* option to add all the supplementary subflows*/
 bool opt_addWifi = FALSE;	/* option to add the Wifi subflow */
-bool opt_addCellular = FALSE;		/* option to add the 3G subflow */
+bool opt_addCellular = FALSE;		/* option to add the Cellular subflow */
 int opt_interval = 0;		/* delay (in seconds) between lines/ports */
 int opt_verbose = 0;		/* be verbose (> 1 to be MORE verbose) */
 int opt_wait = 0;		/* wait time */
@@ -195,7 +189,9 @@ int main(int argc, char *argv[])
   while (TRUE) {
     int option_index = 0;
     static const struct option long_options[] = {
+	{ "all",	no_argument,		NULL, 'a' },
 	{ "close",	no_argument,		NULL, 'c' },
+	{ "cellular",	no_argument,		NULL, 'C' },
 	{ "debug",	no_argument,		NULL, 'd' },
 	{ "exec",	required_argument,	NULL, 'e' },
 	{ "gateway",	required_argument,	NULL, 'g' },
@@ -223,24 +219,25 @@ int main(int argc, char *argv[])
 	{ "version",	no_argument,		NULL, 'V' },
 	{ "hexdump",	no_argument,		NULL, 'x' },
 	{ "wait",	required_argument,	NULL, 'w' },
+	{ "wifi",	no_argument,		NULL, 'W' },
 	{ "zero",	no_argument,		NULL, 'z' },
 	{ 0, 0, 0, 0 }
     };
 
-    c = getopt_long(argc, argv, "1:2:acde:g:G:hi:lL:no:p:P:rs:S:tTuvVxw:z",
+    c = getopt_long(argc, argv, "acCde:g:G:hi:lL:no:p:P:rs:S:tTuvVxw:Wz",
 		    long_options, &option_index);
     if (c == -1)
       break;
 
     switch (c) {
-    case '1':
-      opt_addWifi = TRUE;	/* enable opt_addWifi */
-    case '2':
-      opt_addCellular = TRUE;		/* enable opt_addCellular */
     case 'a':
-      opt_addFlow = TRUE; 	/* enable MPTCP addFlow */
+      opt_addAllSubflows = TRUE; 	/* enable MPTCP all subflows */
+      break;
     case 'c':			/* close connection on EOF from stdin */
       opt_eofclose = TRUE;
+      break;
+    case 'C':
+      opt_addCellular = TRUE;	/* enable MPTCP Cellular subflow */
       break;
     case 'd':			/* enable debugging */
       opt_debug = TRUE;
@@ -357,6 +354,8 @@ int main(int argc, char *argv[])
 	ncprint(NCPRINT_ERROR | NCPRINT_EXIT, _("Invalid wait-time: %s"),
 		optarg);
       break;
+    case 'W':
+      opt_addWifi = TRUE;	/* enable MPTCP Wifi subflow */
     case 'x':			/* hexdump traffic */
       opt_hexdump = TRUE;
       break;

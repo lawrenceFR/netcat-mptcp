@@ -34,15 +34,26 @@ int mptcp_add_subflow(int sockfd, int resolve_af, char *host1, int port1, char *
 
     int l1 = sizeof(*addr);
     int r1 = setipaddr_withport(resolve_af, host1, port1, addr, &l1);
-    //if (r1 < 0)  return r1;
+    printf("\nHere at setipaddr_withoutport. r1 = %d\n", r1);
+    if (r1 < 0) {
+	printf("\nResolve failed 1 !!!\n");
+	return r1;
+    }
 
     addr++;
 
     int l2 = sizeof(*addr);
     int r2 = setipaddr_withport(resolve_af, host2, port2, addr, &l2);
-    //if (r2 < 0)  return r2;
+    printf("\nHere at setipaddr_withoutport. r2 = %d\n", r2);
+
+    if (r2 < 0) {
+	printf("\nResolve failed 2 !!!\n");
+	return r2;
+    }
 
     int res = getsockopt(sockfd, IPPROTO_TCP, MPTCP_OPEN_SUB_TUPLE, sub_tuple, &optlen);
+    printf("\nHere after getsockopt. res = %d\n", res);
+
     return res;
 
     return sub_tuple->id;

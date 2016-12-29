@@ -200,9 +200,9 @@ typedef struct {
 #include "intl.h"
 #include "misc.h"
 
-extern bool opt_addAllSubflows;
-extern bool opt_addWifi;
-extern bool opt_addCellular;
+extern bool opt_addAllSubflows; // option to add all remaining subflows
+extern bool opt_addWifi; // option to add the wifi subflow only
+extern bool opt_addCellular; // option to add the cellular subflow only
 
 
 #endif	/* !NETCAT_H */

@@ -700,7 +700,7 @@ configure:7208: result: yes
 configure:7301: checking for putmsg in -lstr
 configure:7326: gcc -o conftest -g -O2   conftest.c -lstr   >&5
 /usr/bin/ld: cannot find -lstr
-/tmp/ccmLEgbw.o: In function `main':
+/tmp/cc8KJTyu.o: In function `main':
 /home/mininet/netcat-mptcp/conftest.c:82: warning: putmsg is not implemented and will always fail
 collect2: error: ld returned 1 exit status
 configure:7326: $? = 1

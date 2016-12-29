@@ -55,7 +55,7 @@ bool opt_udpmode = FALSE;	/* use udp protocol instead of tcp */
 bool opt_telnet = FALSE;	/* answer in telnet mode */
 bool opt_hexdump = FALSE;	/* hexdump traffic */
 bool opt_zero = FALSE;		/* zero I/O mode (don't expect anything) */
-bool opt_addAllSubflows = FALSE;       /* option to add all the supplementary subflows*/
+bool opt_addAllSubflows = FALSE;       /* option to add all the supplementary subflows */
 bool opt_addWifi = FALSE;	/* option to add the Wifi subflow */
 bool opt_addCellular = FALSE;		/* option to add the Cellular subflow */
 int opt_interval = 0;		/* delay (in seconds) between lines/ports */
@@ -356,6 +356,7 @@ int main(int argc, char *argv[])
       break;
     case 'W':
       opt_addWifi = TRUE;	/* enable MPTCP Wifi subflow */
+      break;
     case 'x':			/* hexdump traffic */
       opt_hexdump = TRUE;
       break;
